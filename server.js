@@ -2,9 +2,14 @@ const WebSocket = require('ws');
 
 const server = new WebSocket.Server({ port: 8080 });
 
-server.on('connection', (socket) => {
-    console.log('Client connecté');
+clients={}
 
+server.on('connection', (socket,req) => {
+    id=req.url.substring(1)
+    console.log('Client connecté:'+id);
+    //Enregistrer le client
+    clients[id]=socket
+    console.log(Object.keys(clients))
     // Envoie un message au client
     socket.send('Bienvenue sur le serveur WebSocket!');
 
@@ -13,12 +18,15 @@ server.on('connection', (socket) => {
         console.log(`Message reçu du client : ${message}`);
 
         // Réponse au client
-        socket.send(`Message reçu: ${message}`);
+        const data=JSON.parse(message)
+        console.log(data.recepteur)
+        clients[data.recepteur].send(`Message reçu: ${message}`);
     });
 
     // Gestion de la fermeture de connexion
     socket.on('close', () => {
-        console.log('Client déconnecté');
+        console.log('Client déconnecté:'+id);
+        delete clients[id]
     });
 });
 
