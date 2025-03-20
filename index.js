@@ -6,7 +6,8 @@ socket.onopen = () => {
 
 socket.onmessage = (event) => {
     console.log('Message reçu :', event.data);
-    document.getElementById('output').innerHTML += `<br>${event.data}`;
+    data=JSON.parse(event.data)
+    document.getElementById('output').innerHTML += `<br>${data.from}:${data.message}`;
 };
 
 socket.onclose = () => {
@@ -16,7 +17,7 @@ socket.onclose = () => {
 function sendMessage() {
     const message = document.getElementById('message').value;
     const recepteur=document.getElementById('recepteur').value;
-    const data={message:message,recepteur:recepteur}
+    const data={message:message,to:recepteur,from:"adil"}
     socket.send(JSON.stringify(data));
     document.getElementById('message').value = '';
 }

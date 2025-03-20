@@ -19,8 +19,8 @@ server.on('connection', (socket,req) => {
 
         // Réponse au client
         const data=JSON.parse(message)
-        console.log(data.recepteur)
-        clients[data.recepteur].send(`Message reçu: ${message}`);
+        console.log(data.to)
+        clients[data.to].send(`Message reçu: ${message}`);
     });
 
     // Gestion de la fermeture de connexion
